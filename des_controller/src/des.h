@@ -77,18 +77,17 @@ typedef enum
 //	EXIT_MSG = 6,
 //	STOP_MSG = 7
 
-	PERSON_SCAN_LEFT = 0,
-	PERSON_SCAN_RIGHT = 1,
-	pERSON_WEIGH_SCALE = 2,
-	PERSON_OPENED_LEFT_DOOR = 3,
-	PERSON_OPENED_RIGHT_DOOR = 4,
-	PERSON_CLOSED_LEFT_DOOR = 5,
-	PERSON_CLOSED_RIGHT_DOOR = 6,
-	GUARD_UNLOCK_RIGHT = 7,
-	GUARD_LOCK_RIGHT = 8,
-	GUARD_LOCK_LEFT = 9,
-	GUARD_UNLOCK_LEFT = 10
-
+	OUT_LS_RS = 0,
+	OUT_WS = 1,
+	OUT_LO = 2,
+	OUT_RO = 3,
+	OUT_LC = 4,
+	OUT_RC = 5,
+	OUT_GRU = 6,
+	OUT_GRL = 7,
+	OUT_GLL = 8,
+	OUT_GLU = 9,
+	OUT_EXIT = 10
 	//TODO :: assign an enum value, one for each output message from the FSM
 } Output;
 
@@ -104,17 +103,17 @@ const char *outMessage[NUM_OUTPUTS] = {
 //	"Exiting.",
 //	"Stop Message."
 
-	"Person scan left",
-	"Person scan right",
-	"Person weigh scale",
+	"Person scanned ID. ID = ",
+	"Person weighed. Weight = ",
 	"Person opened left door",
 	"Person opened right door",
 	"Person closed left door",
 	"Person closed right door",
-	"Guard unlock right",
-	"Guard lock right",
-	"Guard lock left",
-	"Guard unlock left"
+	"Right door unlocked by Guard",
+	"Right door locked by Guard",
+	"Left door locked by Guard",
+	"Left door unlocked by Guard"
+	"Exit Display"
 };
 
 // inputs client sends a Person struct to its server, the controller

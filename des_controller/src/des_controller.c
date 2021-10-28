@@ -13,14 +13,17 @@
 
 int main(int argc, char* argv[]) {
 	int controllerCoid;
+	int rcvid;
 	int controllerChid;
-	pid_t controllerPid;
+	pid_t displayPid;
+	Person person;
 
 	// Checking if Display's PID was passed in
 	if (argc != 1){
 		perror("Missing Display's PID");
 		exit(EXIT_FAILURE);
 	}
+	displayPid = atoi(argv[1]);
 
 	// Create channel for the inputs process to attach
 	controllerChid = ChannelCreate(0);
@@ -30,15 +33,17 @@ int main(int argc, char* argv[]) {
 	}
 
 	// attach to display's PID
-	controllerCoid = ConnectAttach(ND_LOCAL_NODE, atoi(argv[1]), 1, _NTO_SIDE_CHANNEL, 0);
+	controllerCoid = ConnectAttach(ND_LOCAL_NODE, displayPid, 1, _NTO_SIDE_CHANNEL, 0);
 
 
 	printf("Controller PID: %d\n", getpid());
 
 
 	while(1){
-		MsgReceive();
-		MsgReply();
+		rcvid = MsgReceive(controllerCoid, &person, sizeof(Person), NULL);
+//		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
+//
+//		}
 	}
 
 	return EXIT_SUCCESS;
