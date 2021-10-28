@@ -5,27 +5,37 @@
 #include <errno.h>
 #include <unistd.h>
 #include <limits.h>
+#include "../../des_controller/src/des.h"
 #include <sys/neutrino.h>
 
 int main(void) {
 	int rcvid;
-	// Create Channel
-	int chid = ChannelCreate(0);
+	Display display;
+
+	// Create Channel for controller process to attach
+	int displayChid = ChannelCreate(0);
 
 	// Check if channel creation was successful or not
-	if (chid == -1){
+	if (displayChid == -1){
 		perror("Failed to create a channel\n");
 		exit(EXIT_FAILURE);
 	}
 
-	// Print current PID
-	printf("PID: %d\n",getpid());
+	// Print Display PID
+	printf("Display PID: %d\n",getpid());
 
 	while(1){
-		rcvid = MsgReceive(chid, );
-		MsgReply(rcvid, EOK, );
+		rcvid = MsgReceive(displayChid, display, sizeof(Display),NULL);
 
+		if (rcvid == -1){
 
+		}
+
+		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1){ // Should this be moved to bottom of while loop?
+
+		}
+
+		// should ID_scan be a const somewhere in the .h file
 	}
 
 
