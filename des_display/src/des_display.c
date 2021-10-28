@@ -35,7 +35,7 @@ int main(void) {
 
 		}
 
-		if (display.indexOutMessage == OUT_SCANNED){
+		if (display.indexOutMessage == OUT_LS_RS){
 			printf("%s %d\n", outMessage[OUT_LS_RS], display.person.personId);
 		}
 		else if (display.indexOutMessage == OUT_WS){
