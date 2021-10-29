@@ -124,6 +124,7 @@ typedef struct {
 	int personId;
 	int weight;
 	int state;
+	int direction;
 } Person;
 
 // controller client sends a Display struct to its server, the display
