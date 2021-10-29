@@ -45,20 +45,20 @@ int main(int argc, char* argv[]) {
 			printf("Enter Person ID: ");
 			scanf("%d", &person.personId);
 		}
-		// no further prompt is required
-		else if (strcmp(userInput, "lo") == 0 || strcmp(userInput, "ro") == 0
-				|| strcmp(userInput, "lc") == 0 || strcmp(userInput, "rc") == 0
-				|| strcmp(userInput, "glu") == 0
-				|| strcmp(userInput, "gll") == 0
-				|| strcmp(userInput, "gru") == 0
-				|| strcmp(userInput, "grl") == 0) {
-			continue;	// Check if continue usage is correct?
-		}
-		// Prompt for the weight, enter weight
 		else if (strcmp(userInput, "ws") == 0) {
 			printf("Enter Person weight: ");
 			scanf("%d", &person.weight);
 		}
+		// no further prompt is required
+//		else if (strcmp(userInput, "lo") == 0 || strcmp(userInput, "ro") == 0
+//				|| strcmp(userInput, "lc") == 0 || strcmp(userInput, "rc") == 0
+//				|| strcmp(userInput, "glu") == 0
+//				|| strcmp(userInput, "gll") == 0
+//				|| strcmp(userInput, "gru") == 0
+//				|| strcmp(userInput, "grl") == 0) {
+//			continue;	// Check if continue usage is correct?
+//		}
+		// Prompt for the weight, enter weight
 		else if (strcmp(userInput, "exit") == 0) {
 			break;
 		}
