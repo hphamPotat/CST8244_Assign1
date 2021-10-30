@@ -41,11 +41,12 @@ int main(int argc, char* argv[]) {
 
 
 		// = rs or ls, prompt person id, enter person id
-		if (strcmp(userInput, "rs") == 0 || strcmp(userInput, "ls") == 0) {
+		if (strcmp(userInput, inMessage[RS]) == 0 || strcmp(userInput, inMessage[LS]) == 0) {
 			printf("Enter Person ID: ");
 			scanf("%d", &person.personId);
 		}
-		else if (strcmp(userInput, "ws") == 0) {
+		// Prompt for the weight, enter weight
+		else if (strcmp(userInput, inMessage[WS]) == 0) {
 			printf("Enter Person weight: ");
 			scanf("%d", &person.weight);
 		}
@@ -58,16 +59,20 @@ int main(int argc, char* argv[]) {
 //				|| strcmp(userInput, "grl") == 0) {
 //			continue;	// Check if continue usage is correct?
 //		}
-		// Prompt for the weight, enter weight
-		else if (strcmp(userInput, "exit") == 0) {
+
+		// Send Message
+		if (MsgSend(coid, &person, sizeof(Person), NULL, 0) == -1){ // What to put here for arguments
+			perror("Failed to send message");
+			exit(EXIT_FAILURE);
+		}
+
+		// if input is exit, end process
+		if (strcmp(userInput, "exit") == 0) {
 			break;
 		}
 	}
 
-	if (MsgSend(coid, &person, sizeof(Person)) == -1){ // What to put here for arguments
-		perror("Failed to send message");
-		exit(EXIT_FAILURE);
-	}
+
 
 	ConnectDetach(coid);
 	return EXIT_SUCCESS;
