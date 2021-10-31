@@ -44,12 +44,68 @@ int main(int argc, char* argv[]) {
 		if (strcmp(userInput, inMessage[RS]) == 0 || strcmp(userInput, inMessage[LS]) == 0) {
 			printf("Enter Person ID: ");
 			scanf("%d", &person.personId);
-		}
-		// Prompt for the weight, enter weight
-		else if (strcmp(userInput, inMessage[WS]) == 0) {
+			person.direction = strcmp(userInput, inMessage[RS]) == 0 ? RIGHT : LEFT;
+			person.state = FIRST_DOOR_SCAN_STATE;
+
+		} else if (strcmp(userInput, inMessage[WS]) == 0) {
+			// Prompt for the weight, enter weight
 			printf("Enter Person weight: ");
 			scanf("%d", &person.weight);
+			person.state = WEIGHT_SCANNED_STATE;
+
+		} else if (strcmp(userInput, inMessage[LO]) == 0) {
+			if (person.direction == LEFT)
+				person.state = FIRST_DOOR_OPEN_STATE;
+			else
+				person.state = SECOND_DOOR_OPEN_STATE;
+
+		} else if (strcmp(userInput, inMessage[RO]) == 0) {
+			if (person.direction == RIGHT)
+				person.state = FIRST_DOOR_OPEN_STATE;
+			else
+				person.state = SECOND_DOOR_OPEN_STATE;
+
+		} else if (strcmp(userInput, inMessage[LC]) == 0) {
+			if (person.direction == LEFT)
+				person.state = FIRST_DOOR_CLOSE_STATE;
+			else
+				person.state = SECOND_DOOR_CLOSE_STATE;
+
+		} else if (strcmp(userInput, inMessage[RC]) == 0) {
+			if (person.direction == RIGHT)
+				person.state = FIRST_DOOR_CLOSE_STATE;
+			else
+				person.state = SECOND_DOOR_CLOSE_STATE;
+
+		} else if (strcmp(userInput, inMessage[GRU]) == 0) {
+			if (person.direction == RIGHT)
+				person.state = GUARD_FIRST_DOOR_UNLOCK_STATE;
+			else
+				person.state = GUARD_SECOND_DOOR_UNLOCK_STATE;
+
+		} else if (strcmp(userInput, inMessage[GRL]) == 0) {
+			if (person.direction == RIGHT)
+				person.state = GUARD_FIRST_DOOR_LOCK_STATE;
+			else
+				person.state = GUARD_SECOND_DOOR_LOCK_STATE;
+
+		} else if (strcmp(userInput, inMessage[GLL]) == 0) {
+			if (person.direction == LEFT)
+				person.state = GUARD_FIRST_DOOR_LOCK_STATE;
+			else
+				person.state = GUARD_SECOND_DOOR_LOCK_STATE;
+
+		} else if (strcmp(userInput, inMessage[GLU]) == 0) {
+			if (person.direction == LEFT)
+				person.state = GUARD_FIRST_DOOR_UNLOCK_STATE;
+			else
+				person.state = GUARD_SECOND_DOOR_UNLOCK_STATE;
+
+		} else if (strcmp(userInput, inMessage[EXIT]) == 0) {
+			person.state = EXIT_STATE;
+
 		}
+
 		// no further prompt is required
 //		else if (strcmp(userInput, "lo") == 0 || strcmp(userInput, "ro") == 0
 //				|| strcmp(userInput, "lc") == 0 || strcmp(userInput, "rc") == 0
@@ -67,7 +123,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// if input is exit, end process
-		if (strcmp(userInput, "exit") == 0) {
+		if (strcmp(userInput, inMessage[EXIT]) == 0) {
 			break;
 		}
 	}
