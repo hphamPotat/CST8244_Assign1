@@ -104,6 +104,8 @@ int main(int argc, char* argv[]) {
 		} else if (strcmp(userInput, inMessage[EXIT]) == 0) {
 			person.state = EXIT_STATE;
 
+		} else {
+			printf("Invalid input");
 		}
 
 		// no further prompt is required
