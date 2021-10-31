@@ -8,7 +8,7 @@
 #ifndef DOOR_ENTRY_SYSTEM_H_
 #define DOOR_ENTRY_SYSTEM_H_
 
-#define NUM_STATES 8
+#define NUM_STATES 13
 typedef enum
 {
 	START_STATE = 0,
@@ -28,6 +28,12 @@ typedef enum
 	//TODO :: to see the list of //TODOS, Window > Show View > Tasks
 	//TODO :: assign an enum value, one for each state
 } State;
+
+typedef enum
+{
+	LEFT = 0,
+	RIGHT = 1
+} Direction;
 
 #define NUM_INPUTS 12
 typedef enum
