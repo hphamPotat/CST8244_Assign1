@@ -12,7 +12,7 @@
 
 int main(int argc, char* argv[]) {
 	int coid;
-	char userInput[50];	// Don't think need 50 characters for inputs with 4 characters max
+	char userInput[25];	// Don't think need 50 characters for inputs with 4 characters max
 	pid_t controllerPid;
 	Person person;
 

@@ -12,13 +12,18 @@
 typedef enum
 {
 	START_STATE = 0,
-	READY_STATE = 1,
-	LEFT_DOWN_STATE = 2,
-	RIGHT_DOWN_STATE = 3,
-	ARMED_STATE = 4,
-	PUNCH_STATE = 5,
-	EXIT_STATE = 6,
-	STOP_STATE = 7
+	IDLE_STATE = 1,
+	FIRST_DOOR_SCAN_STATE = 2,
+	GUARD_FIRST_DOOR_UNLOCK_STATE = 3,
+	FIRST_DOOR_OPEN_STATE = 4,
+	WEIGHT_SCANNED_STATE = 5,
+	FIRST_DOOR_CLOSE_STATE = 6,
+	GUARD_FIRST_DOOR_LOCK_STATE = 7,
+	GUARD_SECOND_DOOR_UNLOCK_STATE = 8,
+	SECOND_DOOR_OPEN_STATE = 9,
+	SECOND_DOOR_CLOSE_STATE = 10,
+	GUARD_SECOND_DOOR_LOCK_STATE = 11,
+	EXIT_STATE = 12
 
 	//TODO :: to see the list of //TODOS, Window > Show View > Tasks
 	//TODO :: assign an enum value, one for each state
@@ -135,6 +140,7 @@ typedef struct {
 	//	Specifically, those messages that display the Person's ID and weight.
 
 	char errMessage[50]; // check again
+	int statusCode;
 	int indexOutMessage;
 	Person person;
 } Display;

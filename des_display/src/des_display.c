@@ -28,11 +28,8 @@ int main(void) {
 		rcvid = MsgReceive(displayChid, display, sizeof(Display),NULL);
 
 		if (rcvid == -1){
-
-		}
-
-		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1){ // Should this be moved to bottom of while loop?
-
+			perror("Failed to receive message\n");
+			exit(EXIT_FAILURE);
 		}
 
 		if (display.indexOutMessage == OUT_LS_RS){
@@ -41,13 +38,14 @@ int main(void) {
 		else if (display.indexOutMessage == OUT_WS){
 			printf("%s %d\n", outMessage[OUT_WS], display.person.weight);
 		}
-		else {
-			int index = display.indexOutMessage;
-
-			if (index >= 2 && index <= 10){
-				printf("%s\n", outMessage[index]);
+		else if (display.indexOutMessage >= 2 && display.indexOutMessage <= 10){
+			printf("%s\n", outMessage[indexOutMessage]);
+			if (display.indexOutMessage == OUT_EXIT){
+				break;
 			}
 		}
+		else printf("Invalid input\n");
+
 //		else if (display.person.state == OUT_LO){
 //			printf("%s\n", outMessage[OUT_LO]);
 //		}
@@ -75,6 +73,13 @@ int main(void) {
 //		else if (display.person.state == OUT_EXIT){
 //			printf("%s\n");
 //		}
+
+
+		display.statusCode = EOK;
+		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1){ // TODO :: Should this be moved to bottom of while loop?
+			perror("Failed to send message\n");
+			exit(EXIT_FAILURE);
+		}
 	}
 
 
