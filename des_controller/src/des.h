@@ -136,6 +136,7 @@ typedef struct {
 	int weight;
 	int state;
 	int direction;
+	char event[25];	// Should this be a pointer?
 } Person;
 
 // controller client sends a Display struct to its server, the display
