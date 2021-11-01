@@ -235,19 +235,91 @@ void *guardFirstDoorLockState(){
 }
 
 void *guardSecondDoorUnlockState(){
+	checkExitState();
 
+	if (strcmp(person.event, inMessage[GRU]) == 0 && direction == LEFT) {
+		display.person = person;
+		display.indexOutMessage = OUT_GRU;
+
+	} else if (strcmp(person.event, inMessage[GLU]) == 0 && direction == RIGHT) {
+		display.person = person;
+		display.indexOutMessage = OUT_GLU;
+	} else {
+		return guardSecondDoorUnlockState;
+	}
+
+	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
+		perror("Controller failed to send message (guardSecondDoorUnlockState)");
+		exit(EXIT_FAILURE);
+	}
+
+	return secondDoorOpenState;
 }
 
 void *secondDoorOpenState(){
+	checkExitState();
 
+	if (strcmp(person.event, inMessage[RO]) == 0 && direction == LEFT) {
+		display.person = person;
+		display.indexOutMessage = OUT_RO;
+
+	} else if (strcmp(person.event, inMessage[LO]) == 0 && direction == RIGHT) {
+		display.person = person;
+		display.indexOutMessage = OUT_LO;
+	} else {
+		return secondDoorOpenState;
+	}
+
+	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
+		perror("Controller failed to send message (secondDoorOpenState)");
+		exit(EXIT_FAILURE);
+	}
+
+	return secondDoorCloseState;
 }
 
 void *secondDoorCloseState(){
+	checkExitState();
 
+	if (strcmp(person.event, inMessage[RC]) == 0 && direction == LEFT) {
+		display.person = person;
+		display.indexOutMessage = OUT_RC;
+
+	} else if (strcmp(person.event, inMessage[LC]) == 0 && direction == RIGHT) {
+		display.person = person;
+		display.indexOutMessage = OUT_LC;
+	} else {
+		return secondDoorCloseState;
+	}
+
+	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
+		perror("Controller failed to send message (secondDoorCloseState)");
+		exit(EXIT_FAILURE);
+	}
+
+	return guardSecondDoorLockState;
 }
 
 void *guardSecondDoorLockState(){
+	checkExitState();
 
+	if (strcmp(person.event, inMessage[GRL]) == 0 && direction == LEFT) {
+		display.person = person;
+		display.indexOutMessage = OUT_GRL;
+
+	} else if (strcmp(person.event, inMessage[GRU]) == 0 && direction == RIGHT) {
+		display.person = person;
+		display.indexOutMessage = OUT_GRU;
+	} else {
+		return guardSecondDoorLockState;
+	}
+
+	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
+		perror("Controller failed to send message (guardSecondDoorLockState)");
+		exit(EXIT_FAILURE);
+	}
+
+	return idleState;
 }
 
 void *exitState(){
