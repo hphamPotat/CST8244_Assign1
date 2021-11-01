@@ -40,6 +40,8 @@ void *secondDoorOpenState();
 void *secondDoorCloseState();
 void *guardSecondDoorLockState();
 void *exitState();
+
+// Wut to do
 void checkExitState();
 
 
@@ -74,9 +76,11 @@ int main(int argc, char* argv[]) {
 	controllerCoid = ConnectAttach(ND_LOCAL_NODE, displayPid, 1, _NTO_SIDE_CHANNEL, 0);
 
 
+	// Print controller PID
 	printf("Controller PID: %d\n", getpid());
 
 
+	// Loop to set next state
 	while(1){
 		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
 
@@ -118,6 +122,12 @@ void *idleState(){
 
 }
 
+/*
+ * Function pointer for when the user first scans.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *firstDoorScanState(){
 //	checkExitState();
 
@@ -137,6 +147,13 @@ void *firstDoorScanState(){
 	return firstDoorScanState;
 }
 
+
+/*
+ * Function pointer for when the guard unlocks the first door.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *guardFirstDoorUnlockState(){
 //	checkExitState();
 
@@ -159,6 +176,13 @@ void *guardFirstDoorUnlockState(){
 	return firstDoorOpenState;
 }
 
+
+/*
+ * Function pointer for when the first door is opened.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *firstDoorOpenState(){
 //	checkExitState();
 
@@ -181,6 +205,13 @@ void *firstDoorOpenState(){
 	return weightScanState;
 }
 
+
+/*
+ * Function pointer for when the weight is scanned.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *weightScanState(){
 //	checkExitState();
 
@@ -199,6 +230,13 @@ void *weightScanState(){
 	return weightScanState;
 }
 
+
+/*
+ * Function pointer for when the first door is closed.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *firstDoorCloseState(){
 //	checkExitState();
 
@@ -221,6 +259,13 @@ void *firstDoorCloseState(){
 	return guardFirstDoorLockState;
 }
 
+
+/*
+ * Function pointer for when the first door is locked.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *guardFirstDoorLockState(){
 //	checkExitState();
 
@@ -243,6 +288,13 @@ void *guardFirstDoorLockState(){
 	return guardSecondDoorUnlockState;
 }
 
+
+/*
+ * Function pointer for when the second door is unlocked.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *guardSecondDoorUnlockState(){
 //	checkExitState();
 
@@ -265,6 +317,13 @@ void *guardSecondDoorUnlockState(){
 	return secondDoorOpenState;
 }
 
+
+/*
+ * Function pointer for when the second door is opened.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *secondDoorOpenState(){
 //	checkExitState();
 
@@ -287,6 +346,13 @@ void *secondDoorOpenState(){
 	return secondDoorCloseState;
 }
 
+
+/*
+ * Function pointer for when the second door is closed.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *secondDoorCloseState(){
 //	checkExitState();
 
@@ -309,6 +375,13 @@ void *secondDoorCloseState(){
 	return guardSecondDoorLockState;
 }
 
+
+/*
+ * Function pointer for when the second door is locked.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
 void *guardSecondDoorLockState(){
 //	checkExitState();
 
@@ -331,6 +404,15 @@ void *guardSecondDoorLockState(){
 	return idleState;
 }
 
-void *exitState(){
 
+/*
+ * Function pointer for when the user entered in EXIT.
+ * Set according print out statements to the console
+ *
+ * If fail to send message, point back to the function itself
+ */
+void *exitState(){
+	if (strcmp(person.event, inMessage[EXIT]) == 0){
+		display.indexOutMessage = OUT_EXIT;
+	}
 }

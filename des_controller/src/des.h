@@ -41,12 +41,6 @@ typedef enum
 #define NUM_INPUTS 12
 typedef enum
 {
-//	LEFT_BUTTON_DOWN = 0,
-//	LEFT_BUTTON_UP = 1,
-//	RIGHT_BUTTON_DOWN = 2,
-//	RIGHT_BUTTON_UP = 3,
-//	STOP_BUTTON = 4
-
 	LS = 0,
 	RS = 1,
 	WS = 2,
@@ -82,15 +76,6 @@ const char *inMessage[NUM_INPUTS] = {
 #define NUM_OUTPUTS 11
 typedef enum
 {
-//	START_MSG = 0,
-//	READY_MSG = 1,
-//	LEFT_DOWN_MSG = 2,
-//	RIGHT_DOWN_MSG = 3,
-//	ARMED_MSG = 4,
-//	PUNCH_MSG = 5,
-//	EXIT_MSG = 6,
-//	STOP_MSG = 7
-
 	OUT_LS_RS = 0,
 	OUT_WS = 1,
 	OUT_LO = 2,
@@ -108,15 +93,6 @@ typedef enum
 
 //TODO :: each output message. For example, "Person opened left door"
 const char *outMessage[NUM_OUTPUTS] = {
-//	"Start Message",
-//	"Ready.",
-//	"Left Button Down = Press Right Button to Arm Press",
-//	"Right Button Down - Press Left Button to Arm Press",
-//	"DANGER - Press Armed",
-//	"Punching.",
-//	"Exiting.",
-//	"Stop Message."
-
 	"Person scanned ID, ID =",
 	"Person weighed, Weight =",
 	"Person opened left door",

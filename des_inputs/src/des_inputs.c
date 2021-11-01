@@ -28,12 +28,13 @@ int main(int argc, char* argv[]) {
 	// Attach to controller's channel
 	coid = ConnectAttach(ND_LOCAL_NODE, controllerPid, 1, _NTO_SIDE_CHANNEL, 0);
 
-
+	// Check if the connectAttach was successfull or not
 	if (coid == -1){
 		printf("Could not Connect Attach ControllerPid\n");
 		exit(EXIT_FAILURE);
 	}
 
+	// Loop to ask for user's input and actions
 	while (1) {
 		printf("Enter the event type (ls = left scan, rs = right scan, ws = weight scale, lo = left open, ro = right open, lc = left closed, rc = right closed , gru = guard right unlock, grl = guard right lock, gll = guard left lock, glu = guard left unlock):\n");
 		scanf("%s", &userInput);
@@ -45,8 +46,9 @@ int main(int argc, char* argv[]) {
 			person.direction = strcmp(userInput, inMessage[RS]) == 0 ? RIGHT : LEFT;
 			person.state = FIRST_DOOR_SCAN_STATE;
 
-		} else if (strcmp(userInput, inMessage[WS]) == 0) {
-			// Prompt for the weight, enter weight
+		}
+		// Prompt for the weight, enter weight
+		else if (strcmp(userInput, inMessage[WS]) == 0) {
 			printf("Enter Person weight: \n");
 			scanf("%d", &person.weight);
 			person.state = WEIGHT_SCANNED_STATE;
@@ -116,6 +118,8 @@ int main(int argc, char* argv[]) {
 //				|| strcmp(userInput, "grl") == 0) {
 //			continue;	// Check if continue usage is correct?
 //		}
+
+		// Copy userInput into event variable in person struct so it can be accessed outside of the file
 		strcpy(person.event, userInput);
 
 		// Send Message

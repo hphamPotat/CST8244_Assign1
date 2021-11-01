@@ -24,6 +24,7 @@ int main(void) {
 	// Print Display PID
 	printf("Display PID: %d\n",getpid());
 
+	// Loop to display the right messages to the console corresponding to action event
 	while(1){
 		rcvid = MsgReceive(displayChid, &display, sizeof(Display),NULL);
 
@@ -32,11 +33,16 @@ int main(void) {
 			exit(EXIT_FAILURE);
 		}
 
+		// If the action was LS or RS
 		if (display.indexOutMessage == OUT_LS_RS){
 			printf("%s %d\n", outMessage[OUT_LS_RS], display.person.personId);
-		} else if (display.indexOutMessage == OUT_WS){
+		}
+		// If the action was WS
+		else if (display.indexOutMessage == OUT_WS){
 			printf("%s %d\n", outMessage[OUT_WS], display.person.weight);
-		} else
+		}
+		// Others
+		else
 			printf("%s\n", outMessage[display.indexOutMessage]);
 //		else if (display.indexOutMessage >= 2 && display.indexOutMessage <= 10){
 //			printf("%s\n", outMessage[indexOutMessage]);
@@ -73,17 +79,22 @@ int main(void) {
 //		}
 
 
+		// Set status code to EOK
 		display.statusCode = EOK;
+
+		// Check if message was replied/printed successfully
 		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1){ // TODO :: Should this be moved to bottom of while loop?
 			perror("Failed to send message\n");
 			exit(EXIT_FAILURE);
 		}
 
+		// If the action was EXIT
 		if (display.indexOutMessage == OUT_EXIT)
 			break;
 	}
 
 
+	// Destroy channel
 	ChannelDestroy(displayChid);
 
 	return EXIT_SUCCESS;
