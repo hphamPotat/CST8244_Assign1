@@ -40,15 +40,17 @@ void *secondDoorOpenState();
 void *secondDoorCloseState();
 void *guardSecondDoorLockState();
 void *exitState();
-void *checkExitState();
+void checkExitState();
 
 
-//Display display;
+Display display;
 Person person;
-State nextState = startState;
+NextState nextState = startState;
+Direction direction = DEFAULT;
+int controllerCoid;
 
 int main(int argc, char* argv[]) {
-	int controllerCoid;
+
 	int rcvid;
 	int controllerChid;
 	pid_t displayPid;
@@ -108,9 +110,20 @@ void *idleState(){
 void *firstDoorScanState(){
 	checkExitState();
 
-	if (person.direction == LEFT){
-		person.state
+	if ((strcmp(person.event, inMessage[RS]) == 0 || strcmp(person.event, inMessage[LS]) == 0) && direction == DEFAULT) {
+		direction = person.direction;
+		display.person = person;
+		display.indexOutMessage = OUT_LS_RS;
+
+		if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
+			perror("Controller failed to send message (firstDoorScanState)");
+			exit(EXIT_FAILURE);
+		}
+
+		return guardFirstDoorUnlockState;
 	}
+
+	return firstDoorScanState;
 }
 
 void *guardFirstDoorUnlockState(){

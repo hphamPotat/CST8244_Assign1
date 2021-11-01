@@ -8,7 +8,7 @@
 #ifndef DOOR_ENTRY_SYSTEM_H_
 #define DOOR_ENTRY_SYSTEM_H_
 
-typedef void*(*State)();
+typedef void*(*NextState)();
 
 #define NUM_STATES 13
 typedef enum
@@ -34,7 +34,8 @@ typedef enum
 typedef enum
 {
 	LEFT = 0,
-	RIGHT = 1
+	RIGHT = 1,
+	DEFAULT = -1
 } Direction;
 
 #define NUM_INPUTS 12
