@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 
 	while (1) {
 		printf(
-				"Enter the event type (ls = left scan, rs = right scan, ws= weight scale, lo =left open, ro=right open, lc = left closed, rc = right closed , gru = guard right unlock, grl = guard right lock, gll=guard left lock, glu = guard left unlock)): ");
+				"Enter the event type (ls = left scan, rs = right scan, ws = weight scale, lo = left open, ro = right open, lc = left closed, rc = right closed , gru = guard right unlock, grl = guard right lock, gll = guard left lock, glu = guard left unlock): ");
 		scanf("%s", userInput);
 
 
