@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
 
 
 	while(1){
-		rcvid = MsgReceive(controllerCoid, &person, sizeof(Person), NULL);
+		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
 //		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
 //
 //		}
