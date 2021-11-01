@@ -126,7 +126,7 @@ const char *outMessage[NUM_OUTPUTS] = {
 	"Right door unlocked by Guard",
 	"Right door locked by Guard",
 	"Left door locked by Guard",
-	"Left door unlocked by Guard"
+	"Left door unlocked by Guard",
 	"Exit Display"
 };
 
