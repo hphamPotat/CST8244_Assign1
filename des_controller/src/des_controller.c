@@ -45,7 +45,8 @@ void checkExitState();
 
 Display display;
 Person person;
-NextState nextState = startState;
+//NextState nextState = startState;
+NextState nextState = firstDoorScanState;
 Direction direction = DEFAULT;
 int controllerCoid;
 
@@ -56,8 +57,8 @@ int main(int argc, char* argv[]) {
 	pid_t displayPid;
 
 	// Checking if Display's PID was passed in
-	if (argc != 1){
-		perror("Missing Display's PID");
+	if (argc != 2){
+		perror("Missing Display's PID\n");
 		exit(EXIT_FAILURE);
 	}
 	displayPid = atoi(argv[1]);
@@ -78,11 +79,14 @@ int main(int argc, char* argv[]) {
 
 	while(1){
 		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
-//		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
-//
-//		}
+
+		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
+			perror("Controller failed to reply input\n");
+			exit(EXIT_FAILURE);
+		}
 
 		nextState = (NextState)(*nextState)();
+
 	}
 
 	return EXIT_SUCCESS;
@@ -91,7 +95,7 @@ int main(int argc, char* argv[]) {
 
 void checkExitState(){
 	if (strcmp(person.event,inMessage[EXIT]) == 0){
-		exitState;
+//		exitState;
 	}
 }
 
@@ -118,7 +122,7 @@ void *firstDoorScanState(){
 		display.indexOutMessage = OUT_LS_RS;
 
 		if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-			perror("Controller failed to send message (firstDoorScanState)");
+			perror("Controller failed to send message (firstDoorScanState)\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -143,7 +147,7 @@ void *guardFirstDoorUnlockState(){
 	}
 
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-		perror("Controller failed to send message (guardFirstDoorUnlockState)");
+		perror("Controller failed to send message (guardFirstDoorUnlockState)\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -165,7 +169,7 @@ void *firstDoorOpenState(){
 	}
 
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-		perror("Controller failed to send message (firstDoorOpenState)");
+		perror("Controller failed to send message (firstDoorOpenState)\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -180,7 +184,7 @@ void *weightScanState(){
 		display.indexOutMessage = OUT_WS;
 
 		if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-			perror("Controller failed to send message (weightScanState)");
+			perror("Controller failed to send message (weightScanState)\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -205,7 +209,7 @@ void *firstDoorCloseState(){
 	}
 
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-		perror("Controller failed to send message (firstDoorCloseState)");
+		perror("Controller failed to send message (firstDoorCloseState)\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -227,7 +231,7 @@ void *guardFirstDoorLockState(){
 	}
 
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-		perror("Controller failed to send message (guardFirstDoorLockState)");
+		perror("Controller failed to send message (guardFirstDoorLockState)\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -249,7 +253,7 @@ void *guardSecondDoorUnlockState(){
 	}
 
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-		perror("Controller failed to send message (guardSecondDoorUnlockState)");
+		perror("Controller failed to send message (guardSecondDoorUnlockState)\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -271,7 +275,7 @@ void *secondDoorOpenState(){
 	}
 
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-		perror("Controller failed to send message (secondDoorOpenState)");
+		perror("Controller failed to send message (secondDoorOpenState)\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -293,7 +297,7 @@ void *secondDoorCloseState(){
 	}
 
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-		perror("Controller failed to send message (secondDoorCloseState)");
+		perror("Controller failed to send message (secondDoorCloseState)\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -315,7 +319,7 @@ void *guardSecondDoorLockState(){
 	}
 
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-		perror("Controller failed to send message (guardSecondDoorLockState)");
+		perror("Controller failed to send message (guardSecondDoorLockState)\n");
 		exit(EXIT_FAILURE);
 	}
 
