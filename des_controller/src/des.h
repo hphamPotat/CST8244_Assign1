@@ -34,7 +34,8 @@ typedef enum
 typedef enum
 {
 	LEFT = 0,
-	RIGHT = 1
+	RIGHT = 1,
+	DEFAULT = -1
 } Direction;
 
 #define NUM_INPUTS 12
