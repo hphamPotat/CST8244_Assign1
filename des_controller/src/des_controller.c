@@ -40,9 +40,12 @@ void *secondDoorOpenState();
 void *secondDoorCloseState();
 void *guardSecondDoorLockState();
 void *exitState();
+void *checkExitState();
 
 
-Display display;
+//Display display;
+Person person;
+State nextState = startState;
 
 int main(int argc, char* argv[]) {
 	int controllerCoid;
@@ -82,32 +85,40 @@ int main(int argc, char* argv[]) {
 }
 
 
+void checkExitState(){
+	if (strcmp(person.event,inMessage[EXIT]) == 0){
+		exitState;
+	}
+}
+
 void *startState(){
+	checkExitState();
+	return idleState;
 
 }
 
 void *idleState(){
+	checkExitState();
+
+	person.state = IDLE_STATE;
+	return firstDoorScanState;
 
 }
 
 void *firstDoorScanState(){
-	if (display.person.state == EXIT_STATE){
-		// return?
-	}
-	else if (display.person.direction == LEFT){
-		display.person.state = LS;
-	}
-	else if (display.person.direction == RIGHT){
-		display.person.state = RS;
+	checkExitState();
+
+	if (person.direction == LEFT){
+		person.state
 	}
 }
 
 void *guardFirstDoorUnlockState(){
-
+	checkExitState();
 }
 
 void *firstDoorOpenState(){
-
+	checkExitState();
 }
 
 void *weightScanState(){
