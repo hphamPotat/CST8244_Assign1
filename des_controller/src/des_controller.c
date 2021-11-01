@@ -81,6 +81,8 @@ int main(int argc, char* argv[]) {
 //		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
 //
 //		}
+
+		nextState = (NextState)(*nextState)();
 	}
 
 	return EXIT_SUCCESS;
@@ -128,6 +130,8 @@ void *firstDoorScanState(){
 
 void *guardFirstDoorUnlockState(){
 	checkExitState();
+
+
 }
 
 void *firstDoorOpenState(){
