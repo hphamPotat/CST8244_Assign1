@@ -22,7 +22,7 @@ int main(void) {
 	}
 
 	// Print Display PID
-	printf("Display PID: %d\n",getpid());
+	printf("The display is running as PID: %d\n\n",getpid());
 
 	// Loop to display the right messages to the console corresponding to action event
 	while(1){

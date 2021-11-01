@@ -77,17 +77,12 @@ int main(int argc, char* argv[]) {
 
 
 	// Print controller PID
-	printf("Controller PID: %d\n", getpid());
+	printf("The controller is running as PID: %d\nWaiting for Person...\n\n", getpid());
 
 
 	// Loop to set next state
 	while(1){
 		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
-
-		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
-			perror("Controller failed to reply input\n");
-			exit(EXIT_FAILURE);
-		}
 
 		if (strcmp(person.event, inMessage[EXIT]) == 0) {
 			(*exitState)();
@@ -95,6 +90,11 @@ int main(int argc, char* argv[]) {
 		}
 
 		nextState = (NextState)(*nextState)();
+
+		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
+			perror("Controller failed to reply input\n");
+			exit(EXIT_FAILURE);
+		}
 
 	}
 

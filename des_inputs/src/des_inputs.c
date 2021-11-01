@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 
 		// = rs or ls, prompt person id, enter person id
 		if (strcmp(userInput, inMessage[RS]) == 0 || strcmp(userInput, inMessage[LS]) == 0) {
-			printf("Enter Person ID:\n");
+			printf("Enter Person's ID:\n");
 			scanf("%d", &person.personId);
 			person.direction = strcmp(userInput, inMessage[RS]) == 0 ? RIGHT : LEFT;
 			person.state = FIRST_DOOR_SCAN_STATE;
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 		}
 		// Prompt for the weight, enter weight
 		else if (strcmp(userInput, inMessage[WS]) == 0) {
-			printf("Enter Person weight: \n");
+			printf("Enter the Person's weight: \n");
 			scanf("%d", &person.weight);
 			person.state = WEIGHT_SCANNED_STATE;
 
