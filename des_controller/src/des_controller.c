@@ -95,7 +95,9 @@ int main(int argc, char* argv[]) {
 			perror("Controller failed to reply input\n");
 			exit(EXIT_FAILURE);
 		}
-
+		if (nextState == idleState){
+			nextState = (NextState)(*nextState)();
+		}
 	}
 
 	return EXIT_SUCCESS;
@@ -116,10 +118,15 @@ void *startState(){
 
 void *idleState(){
 //	checkExitState();
+	direction = DEFAULT;
+	person.direction = DEFAULT;
+	person.weight = -1;
+	person.personId = -99;
+//	person.state = IDLE_STATE;
 
-	person.state = IDLE_STATE;
+	display.person = person;
+
 	return firstDoorScanState;
-
 }
 
 /*
