@@ -85,6 +85,11 @@ int main(int argc, char* argv[]) {
 			exit(EXIT_FAILURE);
 		}
 
+		if (strcmp(person.event, inMessage[EXIT]) == 0) {
+			(*exitState)();
+			break;
+		}
+
 		nextState = (NextState)(*nextState)();
 
 	}
@@ -94,19 +99,19 @@ int main(int argc, char* argv[]) {
 
 
 void checkExitState(){
-	if (strcmp(person.event,inMessage[EXIT]) == 0){
-//		exitState;
+	if (strcmp(person.event, inMessage[EXIT]) == 0){
+		(*exitState)();
 	}
 }
 
 void *startState(){
-	checkExitState();
+//	checkExitState();
 	return idleState;
 
 }
 
 void *idleState(){
-	checkExitState();
+//	checkExitState();
 
 	person.state = IDLE_STATE;
 	return firstDoorScanState;
@@ -114,7 +119,7 @@ void *idleState(){
 }
 
 void *firstDoorScanState(){
-	checkExitState();
+//	checkExitState();
 
 	if ((strcmp(person.event, inMessage[RS]) == 0 || strcmp(person.event, inMessage[LS]) == 0) && direction == DEFAULT) {
 		direction = person.direction;
@@ -133,7 +138,7 @@ void *firstDoorScanState(){
 }
 
 void *guardFirstDoorUnlockState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[GLU]) == 0 && direction == LEFT){
 		display.person = person;
@@ -155,7 +160,7 @@ void *guardFirstDoorUnlockState(){
 }
 
 void *firstDoorOpenState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[LO]) == 0 && direction == LEFT) {
 		display.person = person;
@@ -177,7 +182,7 @@ void *firstDoorOpenState(){
 }
 
 void *weightScanState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[WS]) == 0) {
 		display.person = person;
@@ -195,7 +200,7 @@ void *weightScanState(){
 }
 
 void *firstDoorCloseState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[LC]) == 0 && direction == LEFT) {
 		display.person = person;
@@ -217,7 +222,7 @@ void *firstDoorCloseState(){
 }
 
 void *guardFirstDoorLockState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[GLL]) == 0 && direction == LEFT) {
 		display.person = person;
@@ -239,7 +244,7 @@ void *guardFirstDoorLockState(){
 }
 
 void *guardSecondDoorUnlockState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[GRU]) == 0 && direction == LEFT) {
 		display.person = person;
@@ -261,7 +266,7 @@ void *guardSecondDoorUnlockState(){
 }
 
 void *secondDoorOpenState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[RO]) == 0 && direction == LEFT) {
 		display.person = person;
@@ -283,7 +288,7 @@ void *secondDoorOpenState(){
 }
 
 void *secondDoorCloseState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[RC]) == 0 && direction == LEFT) {
 		display.person = person;
@@ -305,7 +310,7 @@ void *secondDoorCloseState(){
 }
 
 void *guardSecondDoorLockState(){
-	checkExitState();
+//	checkExitState();
 
 	if (strcmp(person.event, inMessage[GRL]) == 0 && direction == LEFT) {
 		display.person = person;
