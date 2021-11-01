@@ -8,6 +8,8 @@
 #ifndef DOOR_ENTRY_SYSTEM_H_
 #define DOOR_ENTRY_SYSTEM_H_
 
+typedef void*(*State)();
+
 #define NUM_STATES 13
 typedef enum
 {
@@ -126,6 +128,8 @@ const char *outMessage[NUM_OUTPUTS] = {
 	"Left door unlocked by Guard"
 	"Exit Display"
 };
+
+
 
 // inputs client sends a Person struct to its server, the controller
 typedef struct {
