@@ -37,7 +37,7 @@ int main(void) {
 		} else if (display.indexOutMessage == OUT_WS){
 			printf("%s %d\n", outMessage[OUT_WS], display.person.weight);
 		} else
-			printf("%s\n\n", outMessage[display.indexOutMessage]);
+			printf("%s\n", outMessage[display.indexOutMessage]);
 //		else if (display.indexOutMessage >= 2 && display.indexOutMessage <= 10){
 //			printf("%s\n", outMessage[indexOutMessage]);
 //
