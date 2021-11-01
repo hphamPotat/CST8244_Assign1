@@ -34,17 +34,15 @@ int main(void) {
 
 		if (display.indexOutMessage == OUT_LS_RS){
 			printf("%s %d\n", outMessage[OUT_LS_RS], display.person.personId);
-		}
-		else if (display.indexOutMessage == OUT_WS){
+		} else if (display.indexOutMessage == OUT_WS){
 			printf("%s %d\n", outMessage[OUT_WS], display.person.weight);
-		}
-		else if (display.indexOutMessage >= 2 && display.indexOutMessage <= 10){
+		} else
 			printf("%s\n", outMessage[indexOutMessage]);
-			if (display.indexOutMessage == OUT_EXIT){
-				break;
-			}
-		}
-		else printf("Invalid input\n");
+//		else if (display.indexOutMessage >= 2 && display.indexOutMessage <= 10){
+//			printf("%s\n", outMessage[indexOutMessage]);
+//
+//		}
+//		else printf("Invalid input\n");
 
 //		else if (display.person.state == OUT_LO){
 //			printf("%s\n", outMessage[OUT_LO]);
@@ -80,6 +78,9 @@ int main(void) {
 			perror("Failed to send message\n");
 			exit(EXIT_FAILURE);
 		}
+
+		if (display.indexOutMessage == OUT_EXIT)
+			break;
 	}
 
 
