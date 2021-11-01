@@ -114,8 +114,8 @@ const char *outMessage[NUM_OUTPUTS] = {
 //	"Exiting.",
 //	"Stop Message."
 
-	"Person scanned ID. ID = ",
-	"Person weighed. Weight = ",
+	"Person scanned ID, ID = ",
+	"Person weighed, Weight = ",
 	"Person opened left door",
 	"Person opened right door",
 	"Person closed left door",
