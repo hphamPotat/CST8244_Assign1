@@ -8,7 +8,7 @@
 #ifndef DOOR_ENTRY_SYSTEM_H_
 #define DOOR_ENTRY_SYSTEM_H_
 
-typedef void*(*State)();
+typedef void*(*NextState)();
 
 #define NUM_STATES 13
 typedef enum
@@ -117,8 +117,8 @@ const char *outMessage[NUM_OUTPUTS] = {
 //	"Exiting.",
 //	"Stop Message."
 
-	"Person scanned ID, ID = ",
-	"Person weighed, Weight = ",
+	"Person scanned ID, ID =",
+	"Person weighed, Weight =",
 	"Person opened left door",
 	"Person opened right door",
 	"Person closed left door",
@@ -126,7 +126,7 @@ const char *outMessage[NUM_OUTPUTS] = {
 	"Right door unlocked by Guard",
 	"Right door locked by Guard",
 	"Left door locked by Guard",
-	"Left door unlocked by Guard"
+	"Left door unlocked by Guard",
 	"Exit Display"
 };
 

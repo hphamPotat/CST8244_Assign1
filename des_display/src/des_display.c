@@ -25,7 +25,7 @@ int main(void) {
 	printf("Display PID: %d\n",getpid());
 
 	while(1){
-		rcvid = MsgReceive(displayChid, display, sizeof(Display),NULL);
+		rcvid = MsgReceive(displayChid, &display, sizeof(Display),NULL);
 
 		if (rcvid == -1){
 			perror("Failed to receive message\n");
@@ -37,7 +37,7 @@ int main(void) {
 		} else if (display.indexOutMessage == OUT_WS){
 			printf("%s %d\n", outMessage[OUT_WS], display.person.weight);
 		} else
-			printf("%s\n", outMessage[indexOutMessage]);
+			printf("%s\n", outMessage[display.indexOutMessage]);
 //		else if (display.indexOutMessage >= 2 && display.indexOutMessage <= 10){
 //			printf("%s\n", outMessage[indexOutMessage]);
 //
@@ -84,7 +84,7 @@ int main(void) {
 	}
 
 
-	ChannelDestroy(chid);
+	ChannelDestroy(displayChid);
 
 	return EXIT_SUCCESS;
 }

@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 	Person person;
 
 	// Check if Controller's PID was passed in from the command line
-	if (argc != 1) {
+	if (argc != 2) {
 		perror("Missing Controller's PID\n");
 		exit(EXIT_FAILURE);
 	}
@@ -35,21 +35,19 @@ int main(int argc, char* argv[]) {
 	}
 
 	while (1) {
-		printf(
-				"Enter the event type (ls = left scan, rs = right scan, ws = weight scale, lo = left open, ro = right open, lc = left closed, rc = right closed , gru = guard right unlock, grl = guard right lock, gll = guard left lock, glu = guard left unlock): ");
-		scanf("%s", userInput);
-
+		printf("Enter the event type (ls = left scan, rs = right scan, ws = weight scale, lo = left open, ro = right open, lc = left closed, rc = right closed , gru = guard right unlock, grl = guard right lock, gll = guard left lock, glu = guard left unlock):\n");
+		scanf("%s", &userInput);
 
 		// = rs or ls, prompt person id, enter person id
 		if (strcmp(userInput, inMessage[RS]) == 0 || strcmp(userInput, inMessage[LS]) == 0) {
-			printf("Enter Person ID: ");
+			printf("Enter Person ID:\n");
 			scanf("%d", &person.personId);
 			person.direction = strcmp(userInput, inMessage[RS]) == 0 ? RIGHT : LEFT;
 			person.state = FIRST_DOOR_SCAN_STATE;
 
 		} else if (strcmp(userInput, inMessage[WS]) == 0) {
 			// Prompt for the weight, enter weight
-			printf("Enter Person weight: ");
+			printf("Enter Person weight: \n");
 			scanf("%d", &person.weight);
 			person.state = WEIGHT_SCANNED_STATE;
 
@@ -118,12 +116,11 @@ int main(int argc, char* argv[]) {
 //				|| strcmp(userInput, "grl") == 0) {
 //			continue;	// Check if continue usage is correct?
 //		}
-
 		strcpy(person.event, userInput);
 
 		// Send Message
 		if (MsgSend(coid, &person, sizeof(Person), NULL, 0) == -1){ // What to put here for arguments
-			perror("Failed to send message");
+			perror("Failed to send message\n");
 			exit(EXIT_FAILURE);
 		}
 
