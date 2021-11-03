@@ -44,40 +44,6 @@ int main(void) {
 		// Others
 		else
 			printf("%s\n", outMessage[display.indexOutMessage]);
-//		else if (display.indexOutMessage >= 2 && display.indexOutMessage <= 10){
-//			printf("%s\n", outMessage[indexOutMessage]);
-//
-//		}
-//		else printf("Invalid input\n");
-
-//		else if (display.person.state == OUT_LO){
-//			printf("%s\n", outMessage[OUT_LO]);
-//		}
-//		else if (display.person.state == OUT_RO){
-//			printf("%s\n", outMessage[OUT_RO]);
-//		}
-//		else if (display.person.state == OUT_LC){
-//			printf("%s\n", outMessage[OUT_LC]);
-//		}
-//		else if (display.person.state == OUT_RC){
-//			printf("%s\n", outMessage[OUT_RC]);
-//		}
-//		else if (display.person.state == OUT_GRU){
-//			printf("%s\n", outMessage[OUT_GRU]);
-//		}
-//		else if (display.person.state == OUT_GRL){
-//			printf("%s\n", outMessage[OUT_GRL]);
-//		}
-//		else if (display.person.state == OUT_GLL){
-//			printf("%s\n", outMessage[OUT_GLL]);
-//		}
-//		else if (display.person.state == OUT_GLU){
-//			printf("%s\n", outMessage[OUT_GLU]);
-//		}
-//		else if (display.person.state == OUT_EXIT){
-//			printf("%s\n");
-//		}
-
 
 		// Set status code to EOK
 		display.statusCode = EOK;
