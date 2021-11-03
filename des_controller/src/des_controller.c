@@ -27,9 +27,8 @@
 
 
 // Function pointers declaration
-void *startState();
-void *idleState();
-void *firstDoorScanState();
+void *startIdleState();
+void *doorScanState();
 void *guardFirstDoorUnlockState();
 void *firstDoorOpenState();
 void *weightScanState();
@@ -48,7 +47,7 @@ void checkExitState();
 Display display;
 Person person;
 //NextState nextState = startState;
-NextState nextState = firstDoorScanState;
+NextState nextState = startIdleState;
 Direction direction = DEFAULT;
 int controllerCoid;
 
@@ -82,6 +81,10 @@ int main(int argc, char* argv[]) {
 
 	// Loop to set next state
 	while(1){
+		if (nextState == startIdleState){
+			nextState = (NextState)(*nextState)();
+		}
+
 		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
 
 		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
@@ -96,9 +99,6 @@ int main(int argc, char* argv[]) {
 
 		nextState = (NextState) (*nextState)();
 
-		if (nextState == idleState){
-			nextState = (NextState)(*nextState)();
-		}
 	}
 
 	return EXIT_SUCCESS;
@@ -111,23 +111,17 @@ void checkExitState(){
 	}
 }
 
-void *startState(){
+void *startIdleState(){
 //	checkExitState();
-	return idleState;
-
-}
-
-void *idleState(){
-//	checkExitState();
+//	person.direction = DEFAULT;
 	direction = DEFAULT;
-	person.direction = DEFAULT;
 	person.weight = -1;
 	person.personId = -99;
 //	person.state = IDLE_STATE;
 
 	display.person = person;
 
-	return firstDoorScanState;
+	return doorScanState;
 }
 
 /*
@@ -136,23 +130,23 @@ void *idleState(){
  *
  * If fail to send message, point back to the function itself
  */
-void *firstDoorScanState(){
+void *doorScanState(){
 //	checkExitState();
 
 	if ((strcmp(person.event, inMessage[RS]) == 0 || strcmp(person.event, inMessage[LS]) == 0) && direction == DEFAULT) {
-		direction = person.direction;
+		direction = strcmp(person.event, inMessage[RS]) == 0 ? RIGHT : LEFT;
 		display.person = person;
 		display.indexOutMessage = OUT_LS_RS;
 
 		if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
-			perror("Controller failed to send message (firstDoorScanState)\n");
+			perror("Controller failed to send message (doorScanState)\n");
 			exit(EXIT_FAILURE);
 		}
 
 		return guardFirstDoorUnlockState;
 	}
 
-	return firstDoorScanState;
+	return doorScanState;
 }
 
 
@@ -412,7 +406,7 @@ void *guardSecondDoorLockState() {
 		exit(EXIT_FAILURE);
 	}
 
-	return idleState;
+	return startIdleState;
 }
 
 

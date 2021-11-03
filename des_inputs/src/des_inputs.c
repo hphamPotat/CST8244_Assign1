@@ -44,14 +44,14 @@ int main(int argc, char* argv[]) {
 			printf("Enter Person's ID:\n");
 			scanf("%d", &person.personId);
 			person.direction = strcmp(userInput, inMessage[RS]) == 0 ? RIGHT : LEFT;
-			person.state = FIRST_DOOR_SCAN_STATE;
+			person.state = DOOR_SCAN_STATE;
 
 		}
 		// Prompt for the weight, enter weight
 		else if (strcmp(userInput, inMessage[WS]) == 0) {
 			printf("Enter the Person's weight: \n");
 			scanf("%d", &person.weight);
-			person.state = WEIGHT_SCANNED_STATE;
+			person.state = WEIGHT_SCAN_STATE;
 
 		}
 
