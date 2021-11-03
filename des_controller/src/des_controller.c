@@ -370,15 +370,18 @@ void *secondDoorCloseState(){
 	} else if (strcmp(person.event, inMessage[LC]) == 0 && direction == RIGHT) {
 		display.person = person;
 		display.indexOutMessage = OUT_LC;
+		printf("R-L second door close\n");
 	} else {
+		printf("In else\n");
 		return secondDoorCloseState;
 	}
-
+	printf("B4 MsgSend\n");
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
 		perror("Controller failed to send message (secondDoorCloseState)\n");
 		exit(EXIT_FAILURE);
 	}
 
+	printf("After MsgSend\n");
 	return guardSecondDoorLockState;
 }
 
