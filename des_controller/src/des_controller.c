@@ -399,9 +399,9 @@ void *guardSecondDoorLockState(){
 		display.person = person;
 		display.indexOutMessage = OUT_GRL;
 
-	} else if (strcmp(person.event, inMessage[GRU]) == 0 && direction == RIGHT) {
+	} else if (strcmp(person.event, inMessage[GLL]) == 0 && direction == RIGHT) {
 		display.person = person;
-		display.indexOutMessage = OUT_GRU;
+		display.indexOutMessage = OUT_GLL;
 	} else {
 		return guardSecondDoorLockState;
 	}
