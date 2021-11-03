@@ -16,29 +16,29 @@ int main(void) {
 	int displayChid = ChannelCreate(0);
 
 	// Check if channel creation was successful or not
-	if (displayChid == -1){
+	if (displayChid == -1) {
 		perror("Failed to create a channel\n");
 		exit(EXIT_FAILURE);
 	}
 
 	// Print Display PID
-	printf("The display is running as PID: %d\n\n",getpid());
+	printf("The display is running as PID: %d\n\n", getpid());
 
 	// Loop to display the right messages to the console corresponding to action event
-	while(1){
-		rcvid = MsgReceive(displayChid, &display, sizeof(Display),NULL);
+	while (1) {
+		rcvid = MsgReceive(displayChid, &display, sizeof(Display), NULL);
 
-		if (rcvid == -1){
+		if (rcvid == -1) {
 			perror("Failed to receive message\n");
 			exit(EXIT_FAILURE);
 		}
 
 		// If the action was LS or RS
-		if (display.indexOutMessage == OUT_LS_RS){
+		if (display.indexOutMessage == OUT_LS_RS) {
 			printf("%s %d\n", outMessage[OUT_LS_RS], display.person.personId);
 		}
 		// If the action was WS
-		else if (display.indexOutMessage == OUT_WS){
+		else if (display.indexOutMessage == OUT_WS) {
 			printf("%s %d\n", outMessage[OUT_WS], display.person.weight);
 		}
 		// Others
@@ -46,10 +46,10 @@ int main(void) {
 			printf("%s\n", outMessage[display.indexOutMessage]);
 
 		// Set status code to EOK
-		display.statusCode = EOK;
+//		display.statusCode = EOK;
 
 		// Check if message was replied/printed successfully
-		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1){ // TODO :: Should this be moved to bottom of while loop?
+		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1) { // TODO :: Should this be moved to bottom of while loop?
 			perror("Failed to send message\n");
 			exit(EXIT_FAILURE);
 		}
@@ -58,7 +58,6 @@ int main(void) {
 		if (display.indexOutMessage == OUT_EXIT)
 			break;
 	}
-
 
 	// Destroy channel
 	ChannelDestroy(displayChid);

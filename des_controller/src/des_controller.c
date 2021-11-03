@@ -84,17 +84,18 @@ int main(int argc, char* argv[]) {
 	while(1){
 		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
 
+		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
+			perror("Controller failed to reply input\n");
+			exit(EXIT_FAILURE);
+		}
+
 		if (strcmp(person.event, inMessage[EXIT]) == 0) {
 			(*exitState)();
 			break;
 		}
 
-		nextState = (NextState)(*nextState)();
+		nextState = (NextState) (*nextState)();
 
-		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
-			perror("Controller failed to reply input\n");
-			exit(EXIT_FAILURE);
-		}
 		if (nextState == idleState){
 			nextState = (NextState)(*nextState)();
 		}
@@ -392,7 +393,7 @@ void *secondDoorCloseState(){
  *
  * If fail to send message, point back to the function itself
  */
-void *guardSecondDoorLockState(){
+void *guardSecondDoorLockState() {
 //	checkExitState();
 
 	if (strcmp(person.event, inMessage[GRL]) == 0 && direction == LEFT) {
@@ -421,8 +422,17 @@ void *guardSecondDoorLockState(){
  *
  * If fail to send message, point back to the function itself
  */
-void *exitState(){
-	if (strcmp(person.event, inMessage[EXIT]) == 0){
+void *exitState() {
+	if (strcmp(person.event, inMessage[EXIT]) == 0) {
 		display.indexOutMessage = OUT_EXIT;
 	}
+
+	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
+		perror("Controller failed to send message (guardSecondDoorLockState)\n");
+		exit(EXIT_FAILURE);
+	}
+
+	printf("Exiting controller\n");
+
+	return exitState;
 }
