@@ -116,7 +116,7 @@ typedef struct {
 	int weight;
 	int state;
 	int direction;
-	char event[25];	// Should this be a pointer?
+	char event[25];
 } Person;
 
 // controller client sends a Display struct to its server, the display
@@ -126,8 +126,6 @@ typedef struct {
 	//	The Person field is needed, as some output message require information from the Person.
 	//	Specifically, those messages that display the Person's ID and weight.
 
-//	char errMessage[50]; // check again
-//	int statusCode;
 	int indexOutMessage;
 	Person person;
 } Display;

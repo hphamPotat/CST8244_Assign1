@@ -11,21 +11,6 @@
 #include <fcntl.h>
 
 
-//START_STATE = 0,
-//IDLE_STATE = 1,
-//FIRST_DOOR_SCAN_STATE = 2,
-//GUARD_FIRST_DOOR_UNLOCK_STATE = 3,
-//FIRST_DOOR_OPEN_STATE = 4,
-//WEIGHT_SCANNED_STATE = 5,
-//FIRST_DOOR_CLOSE_STATE = 6,
-//GUARD_FIRST_DOOR_LOCK_STATE = 7,
-//GUARD_SECOND_DOOR_UNLOCK_STATE = 8,
-//SECOND_DOOR_OPEN_STATE = 9,
-//SECOND_DOOR_CLOSE_STATE = 10,
-//GUARD_SECOND_DOOR_LOCK_STATE = 11,
-//EXIT_STATE = 12
-
-
 // Function pointers declaration
 void *startIdleState();
 void *doorScanState();
@@ -48,11 +33,15 @@ NextState nextState = startIdleState;
 Direction direction = DEFAULT;
 int controllerCoid;
 
+
+
+
 int main(int argc, char* argv[]) {
 
 	int rcvid;
 	int controllerChid;
 	pid_t displayPid;
+
 
 	// Checking if Display's PID was passed in
 	if (argc != 2){
@@ -76,11 +65,20 @@ int main(int argc, char* argv[]) {
 	printf("The controller is running as PID: %d\nWaiting for Person...\n\n", getpid());
 
 
+//	display.person.state = START_IDLE_STATE;
+
+
+
+
 	// Loop to set next state
 	while(1){
 		if (nextState == startIdleState){
 			nextState = (NextState)(*nextState)();
 		}
+
+//		if (display.person.state == START_IDLE_STATE){
+//			display.person.state = DOOR_SCAN_STATE;
+//		}
 
 		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
 
@@ -104,14 +102,10 @@ int main(int argc, char* argv[]) {
 
 
 void *startIdleState(){
-//	checkExitState();
-//	person.direction = DEFAULT;
-	direction = DEFAULT;
-	person.weight = -1;
-	person.personId = -99;
-//	person.state = IDLE_STATE;
-
-	display.person = person;
+	display.person.direction = DEFAULT;
+	display.person.weight = -1;
+	display.person.personId = -99;
+	display.person.state = DOOR_SCAN_STATE;
 
 	return doorScanState;
 }
@@ -123,8 +117,11 @@ void *startIdleState(){
  * If fail to send message, point back to the function itself
  */
 void *doorScanState(){
-	if ((strcmp(person.event, inMessage[RS]) == 0 || strcmp(person.event, inMessage[LS]) == 0) && direction == DEFAULT) {
-		direction = strcmp(person.event, inMessage[RS]) == 0 ? RIGHT : LEFT;
+	if (display.person.state != DOOR_SCAN_STATE){
+		return doorScanState;
+	}
+
+	if ((strcmp(person.event, inMessage[RS]) == 0 || strcmp(person.event, inMessage[LS]) == 0) && display.person.direction == DEFAULT) {
 		display.person = person;
 		display.indexOutMessage = OUT_LS_RS;
 
@@ -133,6 +130,7 @@ void *doorScanState(){
 			exit(EXIT_FAILURE);
 		}
 
+		display.person.state = GUARD_FIRST_DOOR_UNLOCK_STATE;
 		return guardFirstDoorUnlockState;
 	}
 
@@ -147,12 +145,16 @@ void *doorScanState(){
  * If fail to send message, point back to the function itself
  */
 void *guardFirstDoorUnlockState(){
-	if (strcmp(person.event, inMessage[GLU]) == 0 && direction == LEFT){
-		display.person = person;
+	if (display.person.state != GUARD_FIRST_DOOR_UNLOCK_STATE){
+		return guardFirstDoorUnlockState;
+	}
+
+	if (strcmp(person.event, inMessage[GLU]) == 0 && display.person.direction == LEFT){
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_GLU;
 
-	} else if (strcmp(person.event, inMessage[GRU]) == 0 && direction == RIGHT) {
-		display.person = person;
+	} else if (strcmp(person.event, inMessage[GRU]) == 0 && display.person.direction == RIGHT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_GRU;
 	} else {
 		return guardFirstDoorUnlockState;
@@ -163,6 +165,7 @@ void *guardFirstDoorUnlockState(){
 		exit(EXIT_FAILURE);
 	}
 
+	display.person.state = FIRST_DOOR_OPEN_STATE;
 	return firstDoorOpenState;
 }
 
@@ -174,12 +177,16 @@ void *guardFirstDoorUnlockState(){
  * If fail to send message, point back to the function itself
  */
 void *firstDoorOpenState(){
-	if (strcmp(person.event, inMessage[LO]) == 0 && direction == LEFT) {
-		display.person = person;
+	if (display.person.state != FIRST_DOOR_OPEN_STATE){
+		return firstDoorOpenState;
+	}
+
+	if (strcmp(person.event, inMessage[LO]) == 0 && display.person.direction == LEFT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_LO;
 
-	} else if (strcmp(person.event, inMessage[RO]) == 0 && direction == RIGHT) {
-		display.person = person;
+	} else if (strcmp(person.event, inMessage[RO]) == 0 && display.person.direction == RIGHT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_RO;
 	} else {
 		return firstDoorOpenState;
@@ -190,6 +197,7 @@ void *firstDoorOpenState(){
 		exit(EXIT_FAILURE);
 	}
 
+	display.person.state = WEIGHT_SCAN_STATE;
 	return weightScanState;
 }
 
@@ -201,8 +209,12 @@ void *firstDoorOpenState(){
  * If fail to send message, point back to the function itself
  */
 void *weightScanState(){
+	if (display.person.state != WEIGHT_SCAN_STATE){
+		return weightScanState;
+	}
+
 	if (strcmp(person.event, inMessage[WS]) == 0) {
-		display.person = person;
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_WS;
 
 		if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
@@ -210,6 +222,7 @@ void *weightScanState(){
 			exit(EXIT_FAILURE);
 		}
 
+		display.person.state = FIRST_DOOR_CLOSE_STATE;
 		return firstDoorCloseState;
 	}
 
@@ -224,12 +237,16 @@ void *weightScanState(){
  * If fail to send message, point back to the function itself
  */
 void *firstDoorCloseState(){
-	if (strcmp(person.event, inMessage[LC]) == 0 && direction == LEFT) {
-		display.person = person;
+	if (display.person.state != FIRST_DOOR_CLOSE_STATE){
+		return firstDoorCloseState;
+	}
+
+	if (strcmp(person.event, inMessage[LC]) == 0 && display.person.direction == LEFT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_LC;
 
-	} else if (strcmp(person.event, inMessage[RC]) == 0 && direction == RIGHT) {
-		display.person = person;
+	} else if (strcmp(person.event, inMessage[RC]) == 0 && display.person.direction == RIGHT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_RC;
 	} else {
 		return firstDoorCloseState;
@@ -240,6 +257,7 @@ void *firstDoorCloseState(){
 		exit(EXIT_FAILURE);
 	}
 
+	display.person.state = GUARD_FIRST_DOOR_LOCK_STATE;
 	return guardFirstDoorLockState;
 }
 
@@ -251,12 +269,16 @@ void *firstDoorCloseState(){
  * If fail to send message, point back to the function itself
  */
 void *guardFirstDoorLockState(){
-	if (strcmp(person.event, inMessage[GLL]) == 0 && direction == LEFT) {
-		display.person = person;
+	if (display.person.state != GUARD_FIRST_DOOR_LOCK_STATE){
+		return guardFirstDoorLockState;
+	}
+
+	if (strcmp(person.event, inMessage[GLL]) == 0 && display.person.direction == LEFT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_GLL;
 
-	} else if (strcmp(person.event, inMessage[GRL]) == 0 && direction == RIGHT) {
-		display.person = person;
+	} else if (strcmp(person.event, inMessage[GRL]) == 0 && display.person.direction == RIGHT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_GRL;
 	} else {
 		return guardFirstDoorLockState;
@@ -267,6 +289,7 @@ void *guardFirstDoorLockState(){
 		exit(EXIT_FAILURE);
 	}
 
+	display.person.state = GUARD_SECOND_DOOR_UNLOCK_STATE;
 	return guardSecondDoorUnlockState;
 }
 
@@ -278,12 +301,16 @@ void *guardFirstDoorLockState(){
  * If fail to send message, point back to the function itself
  */
 void *guardSecondDoorUnlockState(){
-	if (strcmp(person.event, inMessage[GRU]) == 0 && direction == LEFT) {
-		display.person = person;
+	if (display.person.state != GUARD_SECOND_DOOR_UNLOCK_STATE){
+		return guardSecondDoorUnlockState;
+	}
+
+	if (strcmp(person.event, inMessage[GRU]) == 0 && display.person.direction == LEFT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_GRU;
 
-	} else if (strcmp(person.event, inMessage[GLU]) == 0 && direction == RIGHT) {
-		display.person = person;
+	} else if (strcmp(person.event, inMessage[GLU]) == 0 && display.person.direction == RIGHT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_GLU;
 	} else {
 		return guardSecondDoorUnlockState;
@@ -294,6 +321,7 @@ void *guardSecondDoorUnlockState(){
 		exit(EXIT_FAILURE);
 	}
 
+	display.person.state = SECOND_DOOR_OPEN_STATE;
 	return secondDoorOpenState;
 }
 
@@ -305,12 +333,16 @@ void *guardSecondDoorUnlockState(){
  * If fail to send message, point back to the function itself
  */
 void *secondDoorOpenState(){
-	if (strcmp(person.event, inMessage[RO]) == 0 && direction == LEFT) {
-		display.person = person;
+	if (display.person.state != SECOND_DOOR_OPEN_STATE){
+		return secondDoorOpenState;
+	}
+
+	if (strcmp(person.event, inMessage[RO]) == 0 && display.person.direction == LEFT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_RO;
 
-	} else if (strcmp(person.event, inMessage[LO]) == 0 && direction == RIGHT) {
-		display.person = person;
+	} else if (strcmp(person.event, inMessage[LO]) == 0 && display.person.direction == RIGHT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_LO;
 	} else {
 		return secondDoorOpenState;
@@ -321,6 +353,7 @@ void *secondDoorOpenState(){
 		exit(EXIT_FAILURE);
 	}
 
+	display.person.state = SECOND_DOOR_CLOSE_STATE;
 	return secondDoorCloseState;
 }
 
@@ -332,25 +365,26 @@ void *secondDoorOpenState(){
  * If fail to send message, point back to the function itself
  */
 void *secondDoorCloseState(){
-	if (strcmp(person.event, inMessage[RC]) == 0 && direction == LEFT) {
-		display.person = person;
-		display.indexOutMessage = OUT_RC;
-
-	} else if (strcmp(person.event, inMessage[LC]) == 0 && direction == RIGHT) {
-		display.person = person;
-		display.indexOutMessage = OUT_LC;
-		printf("R-L second door close\n");
-	} else {
-		printf("In else\n");
+	if (display.person.state != SECOND_DOOR_CLOSE_STATE){
 		return secondDoorCloseState;
 	}
-	printf("B4 MsgSend\n");
+
+	if (strcmp(person.event, inMessage[RC]) == 0 && display.person.direction == LEFT) {
+		display.person.event = person.event;
+		display.indexOutMessage = OUT_RC;
+
+	} else if (strcmp(person.event, inMessage[LC]) == 0 && display.person.direction == RIGHT) {
+		display.person.event = person.event;
+		display.indexOutMessage = OUT_LC;
+	} else {
+		return secondDoorCloseState;
+	}
 	if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
 		perror("Controller failed to send message (secondDoorCloseState)\n");
 		exit(EXIT_FAILURE);
 	}
 
-	printf("After MsgSend\n");
+	display.person.state = GUARD_SECOND_DOOR_LOCK_STATE;
 	return guardSecondDoorLockState;
 }
 
@@ -362,12 +396,16 @@ void *secondDoorCloseState(){
  * If fail to send message, point back to the function itself
  */
 void *guardSecondDoorLockState() {
-	if (strcmp(person.event, inMessage[GRL]) == 0 && direction == LEFT) {
-		display.person = person;
+	if (display.person.state != GUARD_SECOND_DOOR_LOCK_STATE){
+		return guardSecondDoorLockState;
+	}
+
+	if (strcmp(person.event, inMessage[GRL]) == 0 && display.person.direction == LEFT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_GRL;
 
-	} else if (strcmp(person.event, inMessage[GLL]) == 0 && direction == RIGHT) {
-		display.person = person;
+	} else if (strcmp(person.event, inMessage[GLL]) == 0 && display.person.direction == RIGHT) {
+		display.person.event = person.event;
 		display.indexOutMessage = OUT_GLL;
 	} else {
 		return guardSecondDoorLockState;
@@ -378,6 +416,7 @@ void *guardSecondDoorLockState() {
 		exit(EXIT_FAILURE);
 	}
 
+	display.person.state = START_IDLE_STATE;
 	return startIdleState;
 }
 

@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 	// Attach to controller's channel
 	coid = ConnectAttach(ND_LOCAL_NODE, controllerPid, 1, _NTO_SIDE_CHANNEL, 0);
 
-	// Check if the connectAttach was successfull or not
+	// Check if the connectAttach was successful or not
 	if (coid == -1){
 		printf("Could not Connect Attach ControllerPid\n");
 		exit(EXIT_FAILURE);
