@@ -150,11 +150,13 @@ void *guardFirstDoorUnlockState(){
 	}
 
 	if (strcmp(person.event, inMessage[GLU]) == 0 && display.person.direction == LEFT){
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+//		display.person.event = person.event;
 		display.indexOutMessage = OUT_GLU;
 
 	} else if (strcmp(person.event, inMessage[GRU]) == 0 && display.person.direction == RIGHT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_GRU;
 	} else {
 		return guardFirstDoorUnlockState;
@@ -182,11 +184,13 @@ void *firstDoorOpenState(){
 	}
 
 	if (strcmp(person.event, inMessage[LO]) == 0 && display.person.direction == LEFT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_LO;
 
 	} else if (strcmp(person.event, inMessage[RO]) == 0 && display.person.direction == RIGHT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_RO;
 	} else {
 		return firstDoorOpenState;
@@ -214,7 +218,9 @@ void *weightScanState(){
 	}
 
 	if (strcmp(person.event, inMessage[WS]) == 0) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		display.person.weight = person.weight;
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_WS;
 
 		if (MsgSend(controllerCoid, &display, sizeof(Display), &display, sizeof(Display)) == -1L) {
@@ -242,11 +248,13 @@ void *firstDoorCloseState(){
 	}
 
 	if (strcmp(person.event, inMessage[LC]) == 0 && display.person.direction == LEFT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_LC;
 
 	} else if (strcmp(person.event, inMessage[RC]) == 0 && display.person.direction == RIGHT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_RC;
 	} else {
 		return firstDoorCloseState;
@@ -274,11 +282,13 @@ void *guardFirstDoorLockState(){
 	}
 
 	if (strcmp(person.event, inMessage[GLL]) == 0 && display.person.direction == LEFT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_GLL;
 
 	} else if (strcmp(person.event, inMessage[GRL]) == 0 && display.person.direction == RIGHT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_GRL;
 	} else {
 		return guardFirstDoorLockState;
@@ -306,11 +316,13 @@ void *guardSecondDoorUnlockState(){
 	}
 
 	if (strcmp(person.event, inMessage[GRU]) == 0 && display.person.direction == LEFT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_GRU;
 
 	} else if (strcmp(person.event, inMessage[GLU]) == 0 && display.person.direction == RIGHT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_GLU;
 	} else {
 		return guardSecondDoorUnlockState;
@@ -338,11 +350,13 @@ void *secondDoorOpenState(){
 	}
 
 	if (strcmp(person.event, inMessage[RO]) == 0 && display.person.direction == LEFT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_RO;
 
 	} else if (strcmp(person.event, inMessage[LO]) == 0 && display.person.direction == RIGHT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_LO;
 	} else {
 		return secondDoorOpenState;
@@ -370,11 +384,13 @@ void *secondDoorCloseState(){
 	}
 
 	if (strcmp(person.event, inMessage[RC]) == 0 && display.person.direction == LEFT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_RC;
 
 	} else if (strcmp(person.event, inMessage[LC]) == 0 && display.person.direction == RIGHT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_LC;
 	} else {
 		return secondDoorCloseState;
@@ -401,11 +417,13 @@ void *guardSecondDoorLockState() {
 	}
 
 	if (strcmp(person.event, inMessage[GRL]) == 0 && display.person.direction == LEFT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_GRL;
 
 	} else if (strcmp(person.event, inMessage[GLL]) == 0 && display.person.direction == RIGHT) {
-		display.person.event = person.event;
+		strcpy(display.person.event, person.event);
+		//		display.person.event = person.event;
 		display.indexOutMessage = OUT_GLL;
 	} else {
 		return guardSecondDoorLockState;
