@@ -40,13 +40,10 @@ void *secondDoorCloseState();
 void *guardSecondDoorLockState();
 void *exitState();
 
-// Wut to do
-void checkExitState();
 
 
 Display display;
 Person person;
-//NextState nextState = startState;
 NextState nextState = startIdleState;
 Direction direction = DEFAULT;
 int controllerCoid;
@@ -105,11 +102,6 @@ int main(int argc, char* argv[]) {
 }
 
 
-void checkExitState(){
-	if (strcmp(person.event, inMessage[EXIT]) == 0){
-		(*exitState)();
-	}
-}
 
 void *startIdleState(){
 //	checkExitState();
@@ -131,8 +123,6 @@ void *startIdleState(){
  * If fail to send message, point back to the function itself
  */
 void *doorScanState(){
-//	checkExitState();
-
 	if ((strcmp(person.event, inMessage[RS]) == 0 || strcmp(person.event, inMessage[LS]) == 0) && direction == DEFAULT) {
 		direction = strcmp(person.event, inMessage[RS]) == 0 ? RIGHT : LEFT;
 		display.person = person;
@@ -157,8 +147,6 @@ void *doorScanState(){
  * If fail to send message, point back to the function itself
  */
 void *guardFirstDoorUnlockState(){
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[GLU]) == 0 && direction == LEFT){
 		display.person = person;
 		display.indexOutMessage = OUT_GLU;
@@ -186,8 +174,6 @@ void *guardFirstDoorUnlockState(){
  * If fail to send message, point back to the function itself
  */
 void *firstDoorOpenState(){
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[LO]) == 0 && direction == LEFT) {
 		display.person = person;
 		display.indexOutMessage = OUT_LO;
@@ -215,8 +201,6 @@ void *firstDoorOpenState(){
  * If fail to send message, point back to the function itself
  */
 void *weightScanState(){
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[WS]) == 0) {
 		display.person = person;
 		display.indexOutMessage = OUT_WS;
@@ -240,8 +224,6 @@ void *weightScanState(){
  * If fail to send message, point back to the function itself
  */
 void *firstDoorCloseState(){
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[LC]) == 0 && direction == LEFT) {
 		display.person = person;
 		display.indexOutMessage = OUT_LC;
@@ -269,8 +251,6 @@ void *firstDoorCloseState(){
  * If fail to send message, point back to the function itself
  */
 void *guardFirstDoorLockState(){
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[GLL]) == 0 && direction == LEFT) {
 		display.person = person;
 		display.indexOutMessage = OUT_GLL;
@@ -298,8 +278,6 @@ void *guardFirstDoorLockState(){
  * If fail to send message, point back to the function itself
  */
 void *guardSecondDoorUnlockState(){
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[GRU]) == 0 && direction == LEFT) {
 		display.person = person;
 		display.indexOutMessage = OUT_GRU;
@@ -327,8 +305,6 @@ void *guardSecondDoorUnlockState(){
  * If fail to send message, point back to the function itself
  */
 void *secondDoorOpenState(){
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[RO]) == 0 && direction == LEFT) {
 		display.person = person;
 		display.indexOutMessage = OUT_RO;
@@ -356,8 +332,6 @@ void *secondDoorOpenState(){
  * If fail to send message, point back to the function itself
  */
 void *secondDoorCloseState(){
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[RC]) == 0 && direction == LEFT) {
 		display.person = person;
 		display.indexOutMessage = OUT_RC;
@@ -388,8 +362,6 @@ void *secondDoorCloseState(){
  * If fail to send message, point back to the function itself
  */
 void *guardSecondDoorLockState() {
-//	checkExitState();
-
 	if (strcmp(person.event, inMessage[GRL]) == 0 && direction == LEFT) {
 		display.person = person;
 		display.indexOutMessage = OUT_GRL;
