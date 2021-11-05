@@ -45,8 +45,6 @@ int main(void) {
 		else
 			printf("%s\n", outMessage[display.indexOutMessage]);
 
-		// Set status code to EOK
-//		display.statusCode = EOK;
 
 		// Check if message was replied/printed successfully
 		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1) { // TODO :: Should this be moved to bottom of while loop?

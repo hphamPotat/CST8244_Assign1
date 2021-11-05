@@ -72,9 +72,6 @@ int main(int argc, char* argv[]) {
 
 	// Loop to set next state
 	while(1){
-		if (nextState == startIdleState){
-			nextState = (NextState)(*nextState)();
-		}
 
 //		if (display.person.state == START_IDLE_STATE){
 //			display.person.state = DOOR_SCAN_STATE;
@@ -87,6 +84,9 @@ int main(int argc, char* argv[]) {
 			exit(EXIT_FAILURE);
 		}
 
+		if (nextState == startIdleState){
+			nextState = (NextState)(*nextState)();
+		}
 		if (strcmp(person.event, inMessage[EXIT]) == 0) {
 			(*exitState)();
 			break;
