@@ -75,14 +75,16 @@ int main(int argc, char* argv[]) {
 
 		if (strcmp(person.event, inMessage[EXIT]) == 0) {
 			(*exitState)();
-		}
-		else nextState = (NextState) (*nextState)();
+		} else nextState = (NextState) (*nextState)();
 
 		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
 			perror("Controller failed to reply input\n");
 			exit(EXIT_FAILURE);
 		}
 
+		if (strcmp(person.event, inMessage[EXIT]) == 0) {
+			break;
+		}
 	}
 
 	ConnectDetach(controllerCoid);
