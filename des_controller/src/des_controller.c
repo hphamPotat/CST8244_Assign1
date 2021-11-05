@@ -25,21 +25,36 @@ void *secondDoorCloseState();
 void *guardSecondDoorLockState();
 void *exitState();
 
-
-
+/*
+ * Display struct to be sent to des_display for output.
+ */
 Display display;
+/*
+ * Person struct for receiving data from des_inputs.
+ */
 Person person;
+/*
+ * Tracks the next state funciton pointer to be call.
+ */
 NextState nextState = startIdleState;
-Direction direction = DEFAULT;
+/*
+ * The connection ID for passing messages to des_display.
+ */
 int controllerCoid;
 
 
-
-
 int main(int argc, char* argv[]) {
-
+	/*
+	 * The message receive ID for replying to des_inputs.
+	 */
 	int rcvid;
+	/*
+	 * The controller's channel ID
+	 */
 	int controllerChid;
+	/*
+	 * The process ID of the display.
+	 */
 	pid_t displayPid;
 
 
@@ -87,13 +102,20 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
+	// Detach from des_display
 	ConnectDetach(controllerCoid);
+	// Destroy channel
 	ChannelDestroy(controllerChid);
 	return EXIT_SUCCESS;
 }
 
 
-
+/*
+ * Function pointer for the start/idle state.
+ * Runs when controller is first started, and after a person goes through the des.
+ *
+ * Resets all of the values, for the next person to go through the des.
+ */
 void *startIdleState(){
 	display.person.direction = DEFAULT;
 	display.person.weight = -1;

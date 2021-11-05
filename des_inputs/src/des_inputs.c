@@ -36,7 +36,10 @@ int main(int argc, char* argv[]) {
 
 	// Loop to ask for user's input and actions
 	while (1) {
-		printf("Enter the event type (ls = left scan, rs = right scan, ws = weight scale, lo = left open, ro = right open, lc = left closed, rc = right closed , gru = guard right unlock, grl = guard right lock, gll = guard left lock, glu = guard left unlock):\n");
+		printf("Enter the event type (ls = left scan, rs = right scan, "
+				"ws = weight scale, lo = left open, ro = right open, "
+				"lc = left closed, rc = right closed , gru = guard right unlock, "
+				"grl = guard right lock, gll = guard left lock, glu = guard left unlock):\n");
 		scanf("%s", &userInput);
 
 		// = rs or ls, prompt person id, enter person id
