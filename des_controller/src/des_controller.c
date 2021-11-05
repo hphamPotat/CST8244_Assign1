@@ -64,38 +64,29 @@ int main(int argc, char* argv[]) {
 	// Print controller PID
 	printf("The controller is running as PID: %d\nWaiting for Person...\n\n", getpid());
 
-
-//	display.person.state = START_IDLE_STATE;
-
-
-
-
 	// Loop to set next state
 	while(1){
-
-//		if (display.person.state == START_IDLE_STATE){
-//			display.person.state = DOOR_SCAN_STATE;
-//		}
+		if (nextState == startIdleState){
+			nextState = (NextState)(*nextState)();
+		}
 
 		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
+
+
+		if (strcmp(person.event, inMessage[EXIT]) == 0) {
+			(*exitState)();
+		}
+		else nextState = (NextState) (*nextState)();
 
 		if (MsgReply(rcvid, EOK, &person, sizeof(Person)) == -1){
 			perror("Controller failed to reply input\n");
 			exit(EXIT_FAILURE);
 		}
 
-		if (nextState == startIdleState){
-			nextState = (NextState)(*nextState)();
-		}
-		if (strcmp(person.event, inMessage[EXIT]) == 0) {
-			(*exitState)();
-			break;
-		}
-
-		nextState = (NextState) (*nextState)();
-
 	}
 
+	ConnectDetach(controllerCoid);
+	ChannelDestroy(controllerChid);
 	return EXIT_SUCCESS;
 }
 
