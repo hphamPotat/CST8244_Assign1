@@ -7,16 +7,23 @@
 #include <limits.h>
 #include "../../des_controller/src/des.h"
 #include <sys/neutrino.h>
+#include <sys/dispatch.h>
 
 int main(void) {
 	int rcvid;
 	Display display;
+	name_attach_t *displayAttach;
 
 	// Create Channel for controller process to attach
-	int displayChid = ChannelCreate(0);
+//	int displayChid = ChannelCreate(0);
+	displayAttach = name_attach(NULL, "displayName", 0);
 
 	// Check if channel creation was successful or not
-	if (displayChid == -1) {
+//	if (displayChid == -1) {
+//		perror("Failed to create a channel\n");
+//		exit(EXIT_FAILURE);
+//	}
+	if (displayAttach == NULL) {
 		perror("Failed to create a channel\n");
 		exit(EXIT_FAILURE);
 	}
@@ -26,7 +33,8 @@ int main(void) {
 
 	// Loop to display the right messages to the console corresponding to action event
 	while (1) {
-		rcvid = MsgReceive(displayChid, &display, sizeof(Display), NULL);
+//		rcvid = MsgReceive(displayChid, &display, sizeof(Display), NULL);
+		rcvid = MsgReceive(displayAttach->chid, &display, sizeof(Display), NULL);
 
 		if (rcvid == -1) {
 			perror("Failed to receive message\n");
@@ -47,7 +55,7 @@ int main(void) {
 
 
 		// Check if message was replied/printed successfully
-		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1) { // TODO :: Should this be moved to bottom of while loop?
+		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1) {
 			perror("Failed to send message\n");
 			exit(EXIT_FAILURE);
 		}
@@ -58,7 +66,8 @@ int main(void) {
 	}
 
 	// Destroy channel
-	ChannelDestroy(displayChid);
+//	ChannelDestroy(displayChid);
+	name_detach(displayAttach, 0);
 
 	return EXIT_SUCCESS;
 }

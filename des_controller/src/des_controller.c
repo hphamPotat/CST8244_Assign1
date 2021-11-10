@@ -9,6 +9,7 @@
 #include <sys/iomsg.h>
 #include "des.h"
 #include <fcntl.h>
+#include <sys/dispatch.h>
 
 
 // Function pointers declaration
@@ -51,29 +52,35 @@ int main(int argc, char* argv[]) {
 	/*
 	 * The controller's channel ID
 	 */
-	int controllerChid;
+//	int controllerChid;
+	name_attach_t *controllerAttach;
+
 	/*
 	 * The process ID of the display.
 	 */
-	pid_t displayPid;
+//	pid_t displayPid;
 
 
 	// Checking if Display's PID was passed in
-	if (argc != 2){
-		perror("Missing Display's PID\n");
-		exit(EXIT_FAILURE);
-	}
-	displayPid = atoi(argv[1]);
+//	if (argc != 2){
+//		perror("Missing Display's PID\n");
+//		exit(EXIT_FAILURE);
+//	}
+//	displayPid = atoi(argv[1]);
 
 	// Create channel for the inputs process to attach
-	controllerChid = ChannelCreate(0);
-	if (controllerChid == -1){
-		perror("Failed to create channel\n");
-		exit(EXIT_FAILURE);
-	}
+//	controllerChid = ChannelCreate(0);
+//	if (controllerChid == -1){
+//		perror("Failed to create channel\n");
+//		exit(EXIT_FAILURE);
+//	}
+	controllerAttach = name_attach(NULL,"controllerName",0);
+
+
 
 	// attach to display's PID
-	controllerCoid = ConnectAttach(ND_LOCAL_NODE, displayPid, 1, _NTO_SIDE_CHANNEL, 0);
+//	controllerCoid = ConnectAttach(ND_LOCAL_NODE, displayPid, 1, _NTO_SIDE_CHANNEL, 0);
+	controllerCoid = name_open("displayName", 0);
 
 
 	// Print controller PID
@@ -85,8 +92,8 @@ int main(int argc, char* argv[]) {
 			nextState = (NextState)(*nextState)();
 		}
 
-		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
-
+//		rcvid = MsgReceive(controllerChid, &person, sizeof(Person), NULL);
+		rcvid = MsgReceive(controllerAttach->chid, &person, sizeof(Person), NULL);
 
 		if (strcmp(person.event, inMessage[EXIT]) == 0) {
 			(*exitState)();
@@ -103,9 +110,13 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Detach from des_display
-	ConnectDetach(controllerCoid);
+//	ConnectDetach(controllerCoid);
 	// Destroy channel
-	ChannelDestroy(controllerChid);
+//	ChannelDestroy(controllerChid);
+
+	name_detach(controllerAttach, 0);
+	name_close(controllerCoid);
+
 	return EXIT_SUCCESS;
 }
 

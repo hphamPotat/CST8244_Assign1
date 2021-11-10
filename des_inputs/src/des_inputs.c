@@ -9,24 +9,27 @@
 #include <sys/iomsg.h>
 #include "../../des_controller/src/des.h"
 #include <fcntl.h>
+#include <sys/dispatch.h>
 
 int main(int argc, char* argv[]) {
 	int coid;
 	char userInput[25];	// Don't think need 50 characters for inputs with 4 characters max
-	pid_t controllerPid;
+//	pid_t controllerPid;
 	Person person;
 
+
 	// Check if Controller's PID was passed in from the command line
-	if (argc != 2) {
-		perror("Missing Controller's PID\n");
-		exit(EXIT_FAILURE);
-	}
+//	if (argc != 2) {
+//		perror("Missing Controller's PID\n");
+//		exit(EXIT_FAILURE);
+//	}
 
 	// Assigning the controller PID to a variable
-	controllerPid = atoi(argv[1]);
+//	controllerPid = atoi(argv[1]);
 
 	// Attach to controller's channel
-	coid = ConnectAttach(ND_LOCAL_NODE, controllerPid, 1, _NTO_SIDE_CHANNEL, 0);
+//	coid = ConnectAttach(ND_LOCAL_NODE, controllerPid, 1, _NTO_SIDE_CHANNEL, 0);
+	coid = name_open("controllerName", 0);
 
 	// Check if the connectAttach was successful or not
 	if (coid == -1){
@@ -75,6 +78,7 @@ int main(int argc, char* argv[]) {
 
 
 
-	ConnectDetach(coid);
+//	ConnectDetach(coid);
+	name_close(coid);
 	return EXIT_SUCCESS;
 }
