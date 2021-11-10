@@ -34,7 +34,8 @@ int main(void) {
 	// Loop to display the right messages to the console corresponding to action event
 	while (1) {
 //		rcvid = MsgReceive(displayChid, &display, sizeof(Display), NULL);
-		rcvid = MsgReceive(displayAttach->chid, &display, sizeof(Display), NULL);
+		rcvid = MsgReceive(displayAttach->chid, &display, sizeof(Display),
+				NULL);
 
 		if (rcvid == -1) {
 			perror("Failed to receive message\n");
@@ -52,7 +53,6 @@ int main(void) {
 		// Others
 		else
 			printf("%s\n", outMessage[display.indexOutMessage]);
-
 
 		// Check if message was replied/printed successfully
 		if (MsgReply(rcvid, EOK, &display, sizeof(display)) == -1) {

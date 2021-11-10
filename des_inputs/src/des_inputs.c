@@ -17,7 +17,6 @@ int main(int argc, char* argv[]) {
 //	pid_t controllerPid;
 	Person person;
 
-
 	// Check if Controller's PID was passed in from the command line
 //	if (argc != 2) {
 //		perror("Missing Controller's PID\n");
@@ -32,24 +31,27 @@ int main(int argc, char* argv[]) {
 	coid = name_open("controllerName", 0);
 
 	// Check if the connectAttach was successful or not
-	if (coid == -1){
+	if (coid == -1) {
 		printf("Could not Connect Attach ControllerPid\n");
 		exit(EXIT_FAILURE);
 	}
 
 	// Loop to ask for user's input and actions
 	while (1) {
-		printf("Enter the event type (ls = left scan, rs = right scan, "
-				"ws = weight scale, lo = left open, ro = right open, "
-				"lc = left closed, rc = right closed , gru = guard right unlock, "
-				"grl = guard right lock, gll = guard left lock, glu = guard left unlock):\n");
+		printf(
+				"Enter the event type (ls = left scan, rs = right scan, "
+						"ws = weight scale, lo = left open, ro = right open, "
+						"lc = left closed, rc = right closed , gru = guard right unlock, "
+						"grl = guard right lock, gll = guard left lock, glu = guard left unlock):\n");
 		scanf("%s", &userInput);
 
 		// = rs or ls, prompt person id, enter person id
-		if (strcmp(userInput, inMessage[RS]) == 0 || strcmp(userInput, inMessage[LS]) == 0) {
+		if (strcmp(userInput, inMessage[RS]) == 0
+				|| strcmp(userInput, inMessage[LS]) == 0) {
 			printf("Enter Person's ID:\n");
 			scanf("%d", &person.personId);
-			person.direction = strcmp(userInput, inMessage[RS]) == 0 ? RIGHT : LEFT;
+			person.direction =
+					strcmp(userInput, inMessage[RS]) == 0 ? RIGHT : LEFT;
 			person.state = DOOR_SCAN_STATE;
 
 		}
@@ -65,7 +67,7 @@ int main(int argc, char* argv[]) {
 		strcpy(person.event, userInput);
 
 		// Send Message
-		if (MsgSend(coid, &person, sizeof(Person), NULL, 0) == -1){ // What to put here for arguments
+		if (MsgSend(coid, &person, sizeof(Person), NULL, 0) == -1) { // What to put here for arguments
 			perror("Failed to send message\n");
 			exit(EXIT_FAILURE);
 		}
@@ -75,8 +77,6 @@ int main(int argc, char* argv[]) {
 			break;
 		}
 	}
-
-
 
 //	ConnectDetach(coid);
 	name_close(coid);
